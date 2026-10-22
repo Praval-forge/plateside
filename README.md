@@ -6,15 +6,17 @@ Clients log meals with a photo. AI names the foods and estimates portions. The c
 
 ## Core flow
 1. Client opens the app, enters a name, uploads or takes a photo of the plate.
-2. A vision model (Anthropic Claude) returns foods, portion estimates and macros as JSON.
+2. A vision model (Google Gemini) returns foods, portion estimates and macros as JSON.
 3. Client edits any item and saves. Meal is marked "corrected by client".
 4. Coach tab: all clients for today on one screen, not-logged-today flag, per-meal reply, week summary.
 
 ## Stack
-Static HTML + Vercel serverless functions (`api/index.js`). Data in Vercel Blob (JSON). Images are resized in the browser. AI key is a server-side env var (`ANTHROPIC_API_KEY`), never in the repo.
+Static HTML + Vercel serverless functions (`api/index.js`). Data in Vercel Blob (JSON). Images are resized in the browser. AI key is a server-side env var (`GEMINI_API_KEY`), never in the repo.
 
 ## Limits (honest)
 Portion estimates from a photo are approximate; the correction step exists for that reason. No login yet: the client picks a name. No push notifications.
 
 ## Run
-`npm i && ANTHROPIC_API_KEY=... npx vercel dev`
+`npm i && GEMINI_API_KEY=... npx vercel dev`
+
+Live: https://plateside-praval-forge.vercel.app
