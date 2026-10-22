@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plateside - meal photos your coach sees today</title>
+<style>
+:root{--g:#1f7a4d;--bg:#f6f7f4;--ink:#1c2420;--mut:#66726b;--card:#fff;--line:#e3e7e1;--warn:#c2410c}
+*{box-sizing:border-box}body{margin:0;font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--g);color:#fff;padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+header h1{font-size:18px;margin:0;flex:1}header button{background:#ffffff26;color:#fff;border:0;padding:8px 14px;border-radius:20px;font-size:14px;cursor:pointer}
+header button.on{background:#fff;color:var(--g);font-weight:600}
+main{max-width:1100px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+h2{font-size:17px;margin:0 0 8px}small,.mut{color:var(--mut)}
+input,textarea,select{font:inherit;padding:9px;border:1px solid var(--line);border-radius:8px;width:100%}
+button.p{background:var(--g);color:#fff;border:0;padding:11px 16px;border-radius:8px;font-size:16px;cursor:pointer}
+button.s{background:#fff;border:1px solid var(--line);padding:7px 12px;border-radius:8px;cursor:pointer}
+button:disabled{opacity:.5}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.row>.fix{flex:none}
+.meal{display:flex;gap:12px}.meal img{width:96px;height:96px;object-fit:cover;border-radius:10px;flex:none}
+.items{width:100%;border-collapse:collapse;font-size:14px}.items td,.items th{padding:3px 4px;text-align:left}.items input{padding:5px;font-size:14px}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;background:#e8f3ec;color:var(--g)}.pill.w{background:#fdeee3;color:var(--warn)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+.reply{background:#f1f5f2;border-radius:8px;padding:6px 10px;margin-top:6px;font-size:14px}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:var(--g)}
+.err{color:var(--warn);margin:6px 0}
+@media(max-width:560px){.meal img{width:72px;height:72px}.items th:nth-child(n+4),.items td:nth-child(n+4){display:none}}
+</style></head><body>
+<header><h1>Plateside</h1><button id="tc" class="on">I'm a client</button><button id="tk">I'm a coach</button></header>
+<main id="app"></main>
+<script>
+const $=s=>document.querySelector(s),app=$('#app');
+const api=(a,opt={},qs='')=>fetch('/api?a='+a+qs,opt.body?{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(opt.body)}:{}).then(async r=>{const j=await r.json();if(!r.ok)throw new Error(j.error||'Error');return j});
+let mode='client',me=localStorage.getItem('pl_me');
+$('#tc').onclick=()=>{mode='client';tabs();render()};$('#tk').onclick=()=>{mode='coach';tabs();render()};
+function tabs(){$('#tc').className=mode=='client'?'on':'';$('#tk').className=mode=='coach'?'on':''}
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tm=t=>new Date(t).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Kolkata'});
+function shrink(file){return new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.8))};im.onerror=no;im.src=URL.createObjectURL(file)})}
+function itemsTable(m,editable){return `<table class="items"><tr><th>Food</th><th>Portion g</th><th>kcal</th><th>P</th><th>C</th><th>F</th></tr>`+m.items.map((i,k)=>editable?`<tr data-k="${k}"><td><input class="n" value="${esc(i.name)}"></td><td><input class="g" type="number" value="${i.portion_g}"></td><td><input class="k" type="number" value="${i.kcal}"></td><td><input class="p" type="number" value="${i.protein}"></td><td><input class="c" type="number" value="${i.carbs}"></td><td><input class="f" type="number" value="${i.fat}"></td></tr>`:`<tr><td>${esc(i.name)} <small>${esc(i.portion_text||'')}</small></td><td>${i.portion_g}</td><td>${i.kcal}</td><td>${i.protein}</td><td>${i.carbs}</td><td>${i.fat}</td></tr>`).join('')+`</table>`}
+function readItems(el){return [...el.querySelectorAll('tr[data-k]')].map(r=>({name:r.querySelector('.n').value,portion_g:r.querySelector('.g').value,kcal:r.querySelector('.k').value,protein:r.querySelector('.p').value,carbs:r.querySelector('.c').value,fat:r.querySelector('.f').value}))}
+function mealCard(m,editable){return `<div class="card" data-id="${m.id}"><div class="meal"><img src="${m.image}"><div style="flex:1;min-width:0"><b>${esc(m.name)}</b> <small>${tm(m.ts)}</small> ${m.corrected?'<span class="pill">corrected by client</span>':`<span class="pill ${m.confidence=='low'?'w':''}">AI ${esc(m.confidence||'')}</span>`}<div class="mut" style="font-size:13px">${esc(m.note?'"'+m.note+'" ':'')}${esc(m.aiNote)}</div></div></div>${itemsTable(m,editable)}${m.replies.map(r=>`<div class="reply"><b>Coach</b> ${tm(r.ts)}: ${esc(r.text)}</div>`).join('')}${editable?`<div class="row" style="margin-top:8px"><button class="s save fix">Save corrections</button><button class="s del fix">Delete meal</button></div>`:''}</div>`}
+async function render(){mode=='client'?clientView():coachView()}
+async function clientView(){
+ if(!me){app.innerHTML=`<div class="card"><h2>Log meals by photo</h2><p class="mut">Snap your plate. AI names the foods and estimates portions. You fix anything it got wrong. Your coach sees it the same day.</p><div class="row"><input id="nm" placeholder="Your name"><button class="p fix" id="go">Start</button></div></div>`;$('#go').onclick=async()=>{const n=$('#nm').value.trim();if(!n)return;const r=await api('join',{body:{name:n}});me=r.client.id;localStorage.setItem('pl_me',me);clientView()};return}
+ const d=await api('day',{},'&client='+me);const t=d.totals;
+ app.innerHTML=`<div class="card"><h2>Log a meal</h2><input type="file" id="ph" accept="image/*" capture="environment"><textarea id="nt" rows="1" placeholder="Optional note (e.g. 'no sugar in tea')" style="margin-top:8px"></textarea><div id="st" class="mut" style="margin-top:6px"></div></div>
+ <div class="card"><h2>Today</h2><b>${Math.round(t.kcal)} kcal</b> <span class="mut">P ${Math.round(t.protein)}g · C ${Math.round(t.carbs)}g · F ${Math.round(t.fat)}g</span><div><small>Signed in as ${esc(me)} · <a href="#" id="out">switch</a> · <a href="#" id="wk">my week summary</a></small></div><div id="wkout" class="mut"></div></div><div id="ms">${d.meals.slice().reverse().map(m=>mealCard(m,true)).join('')||'<p class="mut">No meals yet today.</p>'}</div>`;
+ $('#out').onclick=e=>{e.preventDefault();localStorage.removeItem('pl_me');me=null;clientView()};
+ $('#wk').onclick=async e=>{e.preventDefault();$('#wkout').textContent='Writing...';try{const w=await api('week',{},'&client='+me);$('#wkout').textContent=w.summary}catch(x){$('#wkout').textContent=x.message}};
+ $('#ph').onchange=async e=>{const f=e.target.files[0];if(!f)return;$('#st').textContent='AI is reading your plate...';try{const img=await shrink(f);await api('log',{body:{client:me,image:img,note:$('#nt').value}});clientView()}catch(x){$('#st').innerHTML='<span class="err">'+esc(x.message)+'</span>'}};
+ document.querySelectorAll('#ms .card').forEach(c=>{const id=c.dataset.id;c.querySelector('.save').onclick=async()=>{await api('correct',{body:{id,items:readItems(c)}});clientView()};c.querySelector('.del').onclick=async()=>{await api('delete',{body:{id}});clientView()}})}
+async function coachView(){
+ const d=await api('coach');const nl=d.clients.filter(c=>c.notLogged);
+ app.innerHTML=`<div class="card"><h2>Today, ${d.day}</h2>${nl.length?`<span class="pill w">Not logged yet: ${nl.map(c=>esc(c.client.name)).join(', ')}</span>`:'<span class="pill">Everyone has logged today</span>'}<div class="mut" style="font-size:13px;margin-top:4px">Each column is one client's whole day. Reply to any meal.</div></div><div class="grid">${d.clients.map(c=>`<div class="card" data-c="${c.client.id}"><h2>${esc(c.client.name)}</h2>${c.notLogged?`<span class="pill w">nothing logged today</span> <small>${c.lastLogged?'last: '+new Date(c.lastLogged).toLocaleDateString('en-IN',{timeZone:'Asia/Kolkata'}):'never'}</small>`:`<b>${Math.round(c.totals.kcal)} kcal</b> <small>P ${Math.round(c.totals.protein)} · C ${Math.round(c.totals.carbs)} · F ${Math.round(c.totals.fat)} · ${c.meals.length} meals</small>`}<div><a href="#" class="wk"><small>Week summary</small></a><div class="wo mut" style="font-size:14px"></div></div>${c.meals.map(m=>mealCard(m,false)+`<div class="row" data-m="${m.id}" style="margin:-4px 0 12px"><input class="rt" placeholder="Reply to this meal"><button class="s rp fix">Send</button></div>`).join('')}</div>`).join('')||'<p class="mut">No clients yet. Ask them to open this link and log a meal.</p>'}</div>`;
+ document.querySelectorAll('.rp').forEach(b=>b.onclick=async()=>{const r=b.parentElement;await api('reply',{body:{id:r.dataset.m,text:r.querySelector('.rt').value}});coachView()});
+ document.querySelectorAll('.wk').forEach(a=>a.onclick=async e=>{e.preventDefault();const c=a.closest('[data-c]'),o=c.querySelector('.wo');o.textContent='Writing...';try{o.textContent=(await api('week',{},'&client='+c.dataset.c)).summary}catch(x){o.textContent=x.message}})}
+tabs();render();
+</script></body></html>
