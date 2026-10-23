@@ -1,57 +1,231 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#14804a">
 <title>Plateside - meal photos your coach sees today</title>
 <style>
-:root{--g:#1f7a4d;--bg:#f6f7f4;--ink:#1c2420;--mut:#66726b;--card:#fff;--line:#e3e7e1;--warn:#c2410c}
-*{box-sizing:border-box}body{margin:0;font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
-header{background:var(--g);color:#fff;padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-header h1{font-size:18px;margin:0;flex:1}header button{background:#ffffff26;color:#fff;border:0;padding:8px 14px;border-radius:20px;font-size:14px;cursor:pointer}
-header button.on{background:#fff;color:var(--g);font-weight:600}
-main{max-width:1100px;margin:0 auto;padding:16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
-h2{font-size:17px;margin:0 0 8px}small,.mut{color:var(--mut)}
-input,textarea,select{font:inherit;padding:9px;border:1px solid var(--line);border-radius:8px;width:100%}
-button.p{background:var(--g);color:#fff;border:0;padding:11px 16px;border-radius:8px;font-size:16px;cursor:pointer}
-button.s{background:#fff;border:1px solid var(--line);padding:7px 12px;border-radius:8px;cursor:pointer}
-button:disabled{opacity:.5}
-.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.row>.fix{flex:none}
-.meal{display:flex;gap:12px}.meal img{width:96px;height:96px;object-fit:cover;border-radius:10px;flex:none}
-.items{width:100%;border-collapse:collapse;font-size:14px}.items td,.items th{padding:3px 4px;text-align:left}.items input{padding:5px;font-size:14px}
-.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;background:#e8f3ec;color:var(--g)}.pill.w{background:#fdeee3;color:var(--warn)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
-.reply{background:#f1f5f2;border-radius:8px;padding:6px 10px;margin-top:6px;font-size:14px}
-.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:var(--g)}
-.err{color:var(--warn);margin:6px 0}
-@media(max-width:560px){.meal img{width:72px;height:72px}.items th:nth-child(n+4),.items td:nth-child(n+4){display:none}}
+:root{--g:#14804a;--g2:#0e6a3c;--gl:#e7f5ed;--acc:#f59e0b;--accl:#fff4dc;--bg:#f4f7f5;--ink:#16221b;--mut:#64736a;--card:#fff;--line:#e2e9e4;--warn:#c2410c;--warnl:#fdeee3;--red:#dc2626;--sh:0 1px 2px #0f2a1a0d,0 4px 14px #0f2a1a0f;--p:#3b82f6;--c:#f59e0b;--f:#ec4899}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer}
+a{color:var(--g)}
+:focus-visible{outline:3px solid #14804a55;outline-offset:2px}
+header{position:sticky;top:0;z-index:20;background:#fffffff2;backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hd{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:19px;letter-spacing:-.3px;flex:1}
+.logo svg{flex:none}
+.seg{display:flex;background:#eef3f0;border-radius:999px;padding:3px}
+.seg button{border:0;background:none;padding:7px 15px;border-radius:999px;font-size:14px;font-weight:600;color:var(--mut);transition:.15s}
+.seg button.on{background:var(--g);color:#fff;box-shadow:0 2px 6px #14804a44}
+main{max-width:1100px;margin:0 auto;padding:18px 16px 70px}
+.narrow{max-width:760px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:var(--sh)}
+h2{font-size:17px;margin:0 0 10px;letter-spacing:-.2px}
+h1.hello{font-size:26px;line-height:1.2;margin:2px 0 4px;letter-spacing:-.5px}
+small,.mut{color:var(--mut)}
+input,textarea,select{font:inherit;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;width:100%;background:#fff;transition:border .15s,box-shadow .15s}
+input:focus,textarea:focus{border-color:var(--g);box-shadow:0 0 0 4px #14804a1f;outline:0}
+.btn{border:0;border-radius:11px;padding:11px 18px;font-weight:600;transition:transform .1s,box-shadow .15s,background .15s;display:inline-flex;align-items:center;gap:7px;justify-content:center}
+.btn:active{transform:scale(.97)}
+.btn.p{background:var(--g);color:#fff;box-shadow:0 3px 10px #14804a40}.btn.p:hover{background:var(--g2)}
+.btn.s{background:#fff;border:1.5px solid var(--line);color:var(--ink);padding:8px 13px;font-size:14px}.btn.s:hover{border-color:var(--g);color:var(--g)}
+.btn.d:hover{border-color:var(--red);color:var(--red)}
+.btn.lg{padding:14px 22px;font-size:17px}
+.btn:disabled{opacity:.55;cursor:default}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>.grow{flex:1;min-width:150px}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;background:var(--gl);color:var(--g)}
+.pill.w{background:var(--warnl);color:var(--warn)}.pill.a{background:var(--accl);color:#a16207}
+/* welcome */
+.welcome{text-align:center;padding:34px 22px}
+.welcome .hero{font-size:44px;margin-bottom:6px}
+.welcome h1{font-size:30px;margin:0 0 8px;letter-spacing:-.8px}
+.welcome p{max-width:460px;margin:0 auto 20px;color:var(--mut)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0 4px;text-align:left}
+.steps div{background:var(--bg);border-radius:12px;padding:12px;font-size:14px}.steps b{display:block;font-size:22px}
+.join{display:flex;gap:8px;max-width:420px;margin:0 auto}
+/* progress */
+.top{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+.ring{position:relative;width:132px;height:132px}
+.ring svg{transform:rotate(-90deg)}
+.ring .mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}
+.ring .mid b{font-size:26px;letter-spacing:-.5px}.ring .mid small{font-size:12px}
+.macro{margin:7px 0}.macro .l{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:3px}
+.bar{height:8px;background:#edf2ef;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;border-radius:99px;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:6px}
+.day{text-align:center;font-size:12px;color:var(--mut)}
+.day .dot{height:46px;border-radius:10px;background:#edf2ef;margin-bottom:4px;display:flex;align-items:flex-end;overflow:hidden}
+.day .dot i{display:block;width:100%;background:linear-gradient(#34d399,var(--g));border-radius:10px 10px 0 0;transition:height .6s}
+.day.today b{color:var(--g)}
+.streak{display:inline-flex;align-items:center;gap:6px;background:var(--accl);color:#92400e;font-weight:700;border-radius:999px;padding:5px 12px;font-size:14px}
+/* upload */
+.drop{border:2px dashed #bfd6c8;border-radius:16px;padding:26px 16px;text-align:center;background:#fafdfb;transition:.15s;cursor:pointer;display:block}
+.drop:hover,.drop.over{border-color:var(--g);background:var(--gl)}
+.drop .ic{font-size:38px}.drop b{display:block;font-size:17px}
+.drop input{display:none}
+.prev{display:flex;gap:14px;align-items:center}
+.prev img{width:96px;height:96px;object-fit:cover;border-radius:14px}
+.scan{position:relative;overflow:hidden}
+.scan:after{content:"";position:absolute;left:0;right:0;height:30%;background:linear-gradient(transparent,#34d39966,transparent);animation:sc 1.4s linear infinite}
+@keyframes sc{from{top:-30%}to{top:100%}}
+.dots:after{content:"";animation:dt 1.2s steps(4) infinite}@keyframes dt{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
+/* meals */
+.meal{display:flex;gap:14px}
+.meal img{width:92px;height:92px;object-fit:cover;border-radius:14px;flex:none;background:#eef3f0}
+.meal .info{flex:1;min-width:0}
+.meal h3{margin:0;font-size:17px;letter-spacing:-.2px}
+.macros{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.chip{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:#f1f5f3}
+.chip.k{background:var(--gl);color:var(--g)}.chip.p{color:var(--p);background:#e8f0fe}.chip.c{color:#a16207;background:var(--accl)}.chip.f{color:#be185d;background:#fde7f2}
+details.edit{margin-top:8px}
+details.edit summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--g);list-style:none;padding:6px 0}
+details.edit summary::-webkit-details-marker{display:none}
+details.edit summary:before{content:"✏️ "}
+.items{width:100%;border-collapse:collapse;font-size:14px;margin-top:4px}
+.items th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut);text-align:left;padding:2px 3px}
+.items td{padding:3px}.items input{padding:7px 8px;font-size:14px;border-radius:8px}
+.items.ro td{padding:5px 4px;border-top:1px solid var(--line)}
+.reply{background:var(--gl);border-radius:12px;padding:8px 12px;margin-top:8px;font-size:14px;border-top-left-radius:2px}
+.reply b{color:var(--g)}
+.err{background:var(--warnl);color:var(--warn);padding:9px 12px;border-radius:10px;margin-top:10px;font-size:14px}
+.empty{text-align:center;padding:30px 10px;color:var(--mut)}.empty .big{font-size:42px}
+/* coach */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.tile{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:var(--sh)}
+.tile b{display:block;font-size:28px;letter-spacing:-.8px;line-height:1.1}.tile span{font-size:13px;color:var(--mut)}
+.tile.w b{color:var(--warn)}.tile.g b{color:var(--g)}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.tools input{max-width:260px}
+.filters{display:flex;gap:6px}.filters button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;color:var(--mut)}
+.filters button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;align-items:start}
+.grid .card{margin:0}
+.who{display:flex;align-items:center;gap:11px;margin-bottom:8px}
+.av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;flex:none}
+.who h2{margin:0}
+.cm{border-top:1px solid var(--line);padding:12px 0 2px;margin-top:10px}
+.cm .meal img{width:64px;height:64px;border-radius:12px}
+.cm h3{font-size:15px}
+.rp{display:flex;gap:6px;margin-top:8px}.rp input{padding:8px 10px;font-size:14px}
+.quick{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}.quick button{border:1px solid var(--line);background:#fff;border-radius:999px;font-size:12px;padding:3px 9px;color:var(--mut)}.quick button:hover{border-color:var(--g);color:var(--g)}
+.ins{background:#f7faf8;border-radius:12px;padding:10px 12px;font-size:14px;margin-top:8px;white-space:pre-wrap}
+/* toast & confetti */
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,90px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:999px;font-weight:600;font-size:15px;box-shadow:0 8px 24px #0004;transition:transform .35s cubic-bezier(.2,1.2,.4,1);z-index:50;max-width:92vw;text-align:center}
+#toast.show{transform:translate(-50%,0)}
+.cf{position:fixed;top:-10px;width:9px;height:14px;z-index:60;animation:fall 1.6s ease-in forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.2}}
+.demo{background:var(--accl);color:#92400e;font-size:13px;text-align:center;padding:6px 10px;border-bottom:1px solid #f3dca0}
+.skel{height:90px;border-radius:16px;background:linear-gradient(90deg,#e9efeb,#f6f9f7,#e9efeb);background-size:200% 100%;animation:sk 1.2s infinite;margin-bottom:14px}@keyframes sk{to{background-position:-200% 0}}
+@media(max-width:700px){.tiles{grid-template-columns:repeat(2,1fr)}.top{grid-template-columns:1fr;justify-items:center}.top>div:last-child{width:100%}.steps{grid-template-columns:1fr}h1.hello{font-size:22px}.items .hide{display:none}.join{flex-direction:column}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body>
-<header><h1>Plateside</h1><button id="tc" class="on">I'm a client</button><button id="tk">I'm a coach</button></header>
+<header><div class="hd">
+ <div class="logo"><svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#14804a"/><circle cx="16" cy="16" r="10" fill="none" stroke="#fff" stroke-width="2"/><circle cx="16" cy="16" r="5" fill="#fff"/><path d="M26 5v8M24 5v4a2 2 0 0 0 4 0V5" stroke="#fff" stroke-width="1.4" fill="none" stroke-linecap="round" transform="translate(-4 12) scale(.7)"/></svg>Plateside</div>
+ <div class="seg" role="tablist"><button id="tc" class="on" role="tab">I'm a client</button><button id="tk" role="tab">I'm a coach</button></div>
+</div><div id="demo" class="demo" hidden>Preview mode: sample data and a fake AI. The live site uses the real backend.</div></header>
 <main id="app"></main>
+<div id="toast" role="status" aria-live="polite"></div>
 <script>
-const $=s=>document.querySelector(s),app=$('#app');
-const api=(a,opt={},qs='')=>fetch('/api?a='+a+qs,opt.body?{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(opt.body)}:{}).then(async r=>{const j=await r.json();if(!r.ok)throw new Error(j.error||'Error');return j});
-let mode='client',me=localStorage.getItem('pl_me');
-$('#tc').onclick=()=>{mode='client';tabs();render()};$('#tk').onclick=()=>{mode='coach';tabs();render()};
-function tabs(){$('#tc').className=mode=='client'?'on':'';$('#tk').className=mode=='coach'?'on':''}
-const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],app=$('#app');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const tm=t=>new Date(t).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Kolkata'});
-function shrink(file){return new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.8))};im.onerror=no;im.src=URL.createObjectURL(file)})}
-function itemsTable(m,editable){return `<table class="items"><tr><th>Food</th><th>Portion g</th><th>kcal</th><th>P</th><th>C</th><th>F</th></tr>`+m.items.map((i,k)=>editable?`<tr data-k="${k}"><td><input class="n" value="${esc(i.name)}"></td><td><input class="g" type="number" value="${i.portion_g}"></td><td><input class="k" type="number" value="${i.kcal}"></td><td><input class="p" type="number" value="${i.protein}"></td><td><input class="c" type="number" value="${i.carbs}"></td><td><input class="f" type="number" value="${i.fat}"></td></tr>`:`<tr><td>${esc(i.name)} <small>${esc(i.portion_text||'')}</small></td><td>${i.portion_g}</td><td>${i.kcal}</td><td>${i.protein}</td><td>${i.carbs}</td><td>${i.fat}</td></tr>`).join('')+`</table>`}
+const R=n=>Math.round(+n||0);
+/* ---------- API (falls back to a built-in demo when opened locally) ---------- */
+const LOCAL=/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+async function api(a,opt={},qs=''){
+ if(LOCAL)return mock(a,opt.body,qs);
+ const r=await fetch('/api?a='+a+qs,opt.body?{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(opt.body)}:{});
+ const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Something went wrong. Please try again.');return j}
+function plate(c1,c2,t){return 'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><defs><radialGradient id="g"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></radialGradient></defs><rect width="200" height="200" fill="#e9efe9"/><circle cx="100" cy="100" r="86" fill="#fff"/><circle cx="100" cy="100" r="62" fill="url(#g)"/><text x="100" y="116" font-size="46" text-anchor="middle">${t}</text></svg>`)}
+function mock(a,b,qs){return new Promise((ok,no)=>setTimeout(()=>{try{ok(mockRun(a,b,qs))}catch(e){no(e)}},a=='log'?1600:150))}
+let MDB;function mdb(){if(MDB)return MDB;const now=Date.now(),H=36e5,D=864e5;
+ const m=(c,ago,name,em,c1,c2,items,rep)=>({id:Math.random().toString(36).slice(2,8),client:c,ts:now-ago,image:plate(c1,c2,em),name,confidence:'high',aiNote:'Looks like a home-style portion.',note:'',items,corrected:false,replies:rep||[]});
+ const it=(n,g,k,p,c,f)=>({name:n,portion_g:g,kcal:k,protein:p,carbs:c,fat:f,portion_text:''});
+ const ms=[m('asha',2*H,'Poha with peanuts','🍛','#fcd34d','#f59e0b',[it('Poha',200,310,6,52,8),it('Peanuts',20,115,5,3,10)],[{ts:now-H,text:'Great start! Add some curd for protein.'}]),m('asha',26*H,'Dal, rice & salad','🥗','#86efac','#16a34a',[it('Dal',150,160,9,24,3),it('Rice',180,230,4,50,1)]),m('asha',50*H,'Idli sambar','🍚','#fde68a','#d97706',[it('Idli x3',180,210,6,42,1),it('Sambar',150,90,4,14,2)]),m('rohan',3*H,'Paneer wrap','🌯','#fdba74','#ea580c',[it('Paneer wrap',260,480,22,48,22)]),m('rohan',5*H,'Banana & oats','🍌','#fde047','#ca8a04',[it('Oats',60,230,8,40,4),it('Banana',100,90,1,23,0)]),m('rohan',27*H,'Chicken rice bowl','🍗','#fca5a5','#dc2626',[it('Chicken',150,250,38,0,10),it('Rice',200,260,5,57,1)])];
+ MDB={clients:{asha:{id:'asha',name:'Asha'},rohan:{id:'rohan',name:'Rohan'},meera:{id:'meera',name:'Meera'}},meals:ms};return MDB}
+function mockRun(a,b,qs){const db=mdb(),q=new URLSearchParams(qs),day=t=>new Date(t).toLocaleDateString('en-CA'),tot=ms=>ms.reduce((s,m)=>(m.items.forEach(i=>{s.kcal+=+i.kcal||0;s.protein+=+i.protein||0;s.carbs+=+i.carbs||0;s.fat+=+i.fat||0}),s),{kcal:0,protein:0,carbs:0,fat:0});
+ const today=day(Date.now()),of=c=>db.meals.filter(m=>m.client===c);
+ if(a=='join'){const id=b.name.toLowerCase().replace(/[^a-z0-9]+/g,'-');db.clients[id]=db.clients[id]||{id,name:b.name};return{client:db.clients[id]}}
+ if(a=='day'){const ms=of(q.get('client')).filter(m=>day(m.ts)==today);return{day:today,meals:ms,totals:tot(ms)}}
+ if(a=='stats'){const days=[];for(let i=6;i>=0;i--){const d=day(Date.now()-i*864e5),ms=of(q.get('client')).filter(m=>day(m.ts)==d);days.push({date:d,meals:ms.length,kcal:R(tot(ms).kcal)})}let s=0;for(let i=6;i>=0;i--){if(days[i].meals)s++;else if(i!==6)break}return{days,streak:s}}
+ if(a=='log'){const ml={id:Math.random().toString(36).slice(2,8),client:b.client,ts:Date.now(),image:b.image,name:'Veg thali',confidence:'medium',aiNote:'Estimated from the photo. Please check the portions.',note:b.note||'',items:[{name:'Roti x2',portion_g:80,kcal:240,protein:8,carbs:44,fat:4},{name:'Mixed veg curry',portion_g:150,kcal:140,protein:4,carbs:14,fat:8},{name:'Dal',portion_g:120,kcal:130,protein:7,carbs:19,fat:3}],corrected:false,replies:[]};db.meals.push(ml);return{meal:ml}}
+ if(a=='correct'){const m=db.meals.find(x=>x.id==b.id);m.items=b.items.map(i=>({...i,portion_g:+i.portion_g||0,kcal:+i.kcal||0,protein:+i.protein||0,carbs:+i.carbs||0,fat:+i.fat||0}));m.corrected=true;return{meal:m}}
+ if(a=='delete'){db.meals=db.meals.filter(x=>x.id!=b.id);return{ok:true}}
+ if(a=='reply'){const m=db.meals.find(x=>x.id==b.id);m.replies.push({ts:Date.now(),text:b.text});return{meal:m}}
+ if(a=='coach'){const cl=Object.values(db.clients).map(c=>{const ms=of(c.id).filter(m=>day(m.ts)==today),l=of(c.id).sort((x,y)=>y.ts-x.ts)[0];return{client:c,meals:ms,totals:tot(ms),lastLogged:l?l.ts:null,notLogged:!ms.length}});cl.sort((x,y)=>(y.notLogged-x.notLogged)||x.client.name.localeCompare(y.client.name));return{day:today,clients:cl}}
+ if(a=='week')return{summary:'Sample insight: you logged on most days this week and protein looked steady. Try adding a protein source at breakfast to stay full until lunch.'}
+ throw new Error('Not available in preview')}
+/* ---------- helpers ---------- */
+let mode='client',me=localStorage.getItem('pl_me'),myName=localStorage.getItem('pl_name')||'';
+const GOAL=()=>+localStorage.getItem('pl_goal')||2000;
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('show'),2800)}
+function confetti(){const cs=['#14804a','#f59e0b','#3b82f6','#ec4899','#34d399'];for(let i=0;i<46;i++){const e=document.createElement('i');e.className='cf';e.style.cssText=`left:${Math.random()*100}vw;background:${cs[i%5]};animation-delay:${Math.random()*.4}s;animation-duration:${1.2+Math.random()}s;border-radius:${i%3?'2px':'50%'}`;document.body.appendChild(e);setTimeout(()=>e.remove(),2600)}}
+function tabs(){$('#tc').className=mode=='client'?'on':'';$('#tk').className=mode=='coach'?'on':''}
+$('#tc').onclick=()=>{mode='client';tabs();render()};$('#tk').onclick=()=>{mode='coach';tabs();render()};
+if(LOCAL)$('#demo').hidden=false;
+function skeleton(){app.innerHTML='<div class="narrow"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>'}
+function shrink(file){return new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.8))};im.onerror=()=>no(new Error('Could not read that photo. Try another one.'));im.src=URL.createObjectURL(file)})}
+const greet=()=>{const h=+new Date().toLocaleString('en-GB',{hour:'2-digit',hour12:false,timeZone:'Asia/Kolkata'});return h<12?'Good morning':h<17?'Good afternoon':'Good evening'};
+function motive(meals,kcal,streak){const g=GOAL();
+ if(!meals)return streak?`Your ${streak}-day streak is on the line. One quick photo keeps it alive. 🔥`:'A quick photo of your next meal is all it takes to get started.';
+ if(kcal<g*.5)return 'Great start! Every logged meal makes your coach\'s advice sharper.';
+ if(kcal<g*.9)return "You're well on your way. Keep going, you're doing great! 💪";
+ if(kcal<=g*1.1)return 'Right on target today. Brilliant consistency! 🎯';
+ return "A little over today, and that's okay. Tomorrow is a fresh plate. 🌱"}
+const avc=n=>['#14804a','#2563eb','#c026d3','#ea580c','#0891b2','#7c3aed'][[...n].reduce((a,c)=>a+c.charCodeAt(0),0)%6];
+const macChips=t=>`<span class="chip k">${R(t.kcal)} kcal</span><span class="chip p">P ${R(t.protein)}g</span><span class="chip c">C ${R(t.carbs)}g</span><span class="chip f">F ${R(t.fat)}g</span>`;
+const mt=m=>m.items.reduce((s,i)=>({kcal:s.kcal+(+i.kcal||0),protein:s.protein+(+i.protein||0),carbs:s.carbs+(+i.carbs||0),fat:s.fat+(+i.fat||0)}),{kcal:0,protein:0,carbs:0,fat:0});
+function itemsTable(m,editable){return `<table class="items${editable?'':' ro'}"><tr><th>Food</th><th>Grams</th><th>kcal</th><th class="hide">P</th><th class="hide">C</th><th class="hide">F</th></tr>`+m.items.map((i,k)=>editable?`<tr data-k="${k}"><td><input class="n" value="${esc(i.name)}" aria-label="Food name"></td><td><input class="g" type="number" min="0" value="${i.portion_g}"></td><td><input class="k" type="number" min="0" value="${i.kcal}"></td><td class="hide"><input class="p" type="number" min="0" value="${i.protein}"></td><td class="hide"><input class="c" type="number" min="0" value="${i.carbs}"></td><td class="hide"><input class="f" type="number" min="0" value="${i.fat}"></td></tr>`:`<tr><td>${esc(i.name)} <small>${esc(i.portion_text||'')}</small></td><td>${i.portion_g}g</td><td>${i.kcal}</td><td class="hide">${i.protein}</td><td class="hide">${i.carbs}</td><td class="hide">${i.fat}</td></tr>`).join('')+`</table>`}
 function readItems(el){return [...el.querySelectorAll('tr[data-k]')].map(r=>({name:r.querySelector('.n').value,portion_g:r.querySelector('.g').value,kcal:r.querySelector('.k').value,protein:r.querySelector('.p').value,carbs:r.querySelector('.c').value,fat:r.querySelector('.f').value}))}
-function mealCard(m,editable){return `<div class="card" data-id="${m.id}"><div class="meal"><img src="${m.image}"><div style="flex:1;min-width:0"><b>${esc(m.name)}</b> <small>${tm(m.ts)}</small> ${m.corrected?'<span class="pill">corrected by client</span>':`<span class="pill ${m.confidence=='low'?'w':''}">AI ${esc(m.confidence||'')}</span>`}<div class="mut" style="font-size:13px">${esc(m.note?'"'+m.note+'" ':'')}${esc(m.aiNote)}</div></div></div>${itemsTable(m,editable)}${m.replies.map(r=>`<div class="reply"><b>Coach</b> ${tm(r.ts)}: ${esc(r.text)}</div>`).join('')}${editable?`<div class="row" style="margin-top:8px"><button class="s save fix">Save corrections</button><button class="s del fix">Delete meal</button></div>`:''}</div>`}
-async function render(){mode=='client'?clientView():coachView()}
+function conf(m){return m.corrected?'<span class="pill">✓ Corrected by you</span>':`<span class="pill ${m.confidence=='low'?'w':''}">AI ${esc(m.confidence||'')} confidence</span>`}
+function replies(m){return m.replies.map(r=>`<div class="reply"><b>Coach</b> · ${tm(r.ts)}<br>${esc(r.text)}</div>`).join('')}
+function mealCard(m,editable){return `<div class="card" data-id="${m.id}"><div class="meal"><img src="${m.image}" alt="Photo of ${esc(m.name)}"><div class="info"><h3>${esc(m.name)}</h3><small>${tm(m.ts)}</small> ${conf(m)}<div class="macros">${macChips(mt(m))}</div><div class="mut" style="font-size:13px">${esc(m.note?'“'+m.note+'” ':'')}${esc(m.aiNote)}</div></div></div>${replies(m)}${editable?`<details class="edit"><summary>Check or fix the details</summary><p class="mut" style="font-size:13px;margin:0 0 4px">AI estimates can be off. Fix anything wrong and your coach sees the corrected version.</p>${itemsTable(m,true)}<div class="row" style="margin-top:10px"><button class="btn p save">Save corrections</button><button class="btn s d del">Delete meal</button></div></details>`:''}</div>`}
+async function render(){skeleton();try{await(mode=='client'?clientView():coachView())}catch(e){app.innerHTML=`<div class="narrow"><div class="card empty"><div class="big">😕</div><b>Couldn't load</b><p>${esc(e.message)}</p><button class="btn p" id="rt">Try again</button></div></div>`;$('#rt').onclick=render}}
+/* ---------- client ---------- */
 async function clientView(){
- if(!me){app.innerHTML=`<div class="card"><h2>Log meals by photo</h2><p class="mut">Snap your plate. AI names the foods and estimates portions. You fix anything it got wrong. Your coach sees it the same day.</p><div class="row"><input id="nm" placeholder="Your name"><button class="p fix" id="go">Start</button></div></div>`;$('#go').onclick=async()=>{const n=$('#nm').value.trim();if(!n)return;const r=await api('join',{body:{name:n}});me=r.client.id;localStorage.setItem('pl_me',me);clientView()};return}
- const d=await api('day',{},'&client='+me);const t=d.totals;
- app.innerHTML=`<div class="card"><h2>Log a meal</h2><input type="file" id="ph" accept="image/*" capture="environment"><textarea id="nt" rows="1" placeholder="Optional note (e.g. 'no sugar in tea')" style="margin-top:8px"></textarea><div id="st" class="mut" style="margin-top:6px"></div></div>
- <div class="card"><h2>Today</h2><b>${Math.round(t.kcal)} kcal</b> <span class="mut">P ${Math.round(t.protein)}g · C ${Math.round(t.carbs)}g · F ${Math.round(t.fat)}g</span><div><small>Signed in as ${esc(me)} · <a href="#" id="out">switch</a> · <a href="#" id="wk">my week summary</a></small></div><div id="wkout" class="mut"></div></div><div id="ms">${d.meals.slice().reverse().map(m=>mealCard(m,true)).join('')||'<p class="mut">No meals yet today.</p>'}</div>`;
- $('#out').onclick=e=>{e.preventDefault();localStorage.removeItem('pl_me');me=null;clientView()};
- $('#wk').onclick=async e=>{e.preventDefault();$('#wkout').textContent='Writing...';try{const w=await api('week',{},'&client='+me);$('#wkout').textContent=w.summary}catch(x){$('#wkout').textContent=x.message}};
- $('#ph').onchange=async e=>{const f=e.target.files[0];if(!f)return;$('#st').textContent='AI is reading your plate...';try{const img=await shrink(f);await api('log',{body:{client:me,image:img,note:$('#nt').value}});clientView()}catch(x){$('#st').innerHTML='<span class="err">'+esc(x.message)+'</span>'}};
- document.querySelectorAll('#ms .card').forEach(c=>{const id=c.dataset.id;c.querySelector('.save').onclick=async()=>{await api('correct',{body:{id,items:readItems(c)}});clientView()};c.querySelector('.del').onclick=async()=>{await api('delete',{body:{id}});clientView()}})}
+ if(!me){app.innerHTML=`<div class="narrow"><div class="card welcome"><div class="hero">🥗</div><h1>Show your coach your plate</h1><p>Snap a photo of your meal. AI names the foods and estimates portions, you fix anything it got wrong, and your coach sees it the same day.</p>
+ <form class="join" id="jf"><input id="nm" placeholder="What should we call you?" autocomplete="given-name" aria-label="Your name" maxlength="40" required><button class="btn p lg" type="submit">Get started</button></form><div id="je"></div>
+ <div class="steps"><div><b>📸</b>1. Take a photo</div><div><b>✨</b>2. AI reads your plate</div><div><b>👩‍⚕️</b>3. Coach replies</div></div></div></div>`;
+  $('#jf').onsubmit=async e=>{e.preventDefault();const n=$('#nm').value.trim();if(!n)return;const b=e.target.querySelector('button');b.disabled=true;b.textContent='One moment…';try{const r=await api('join',{body:{name:n}});me=r.client.id;myName=r.client.name;localStorage.setItem('pl_me',me);localStorage.setItem('pl_name',myName);confetti();clientView()}catch(x){b.disabled=false;b.textContent='Get started';$('#je').innerHTML=`<div class="err">${esc(x.message)}</div>`}};return}
+ const [d,st]=await Promise.all([api('day',{},'&client='+encodeURIComponent(me)),api('stats',{},'&client='+encodeURIComponent(me)).catch(()=>null)]);
+ const t=d.totals,g=GOAL(),pct=Math.min(1,t.kcal/g),C=2*Math.PI*54,streak=st?st.streak:0;
+ const wd=st?st.days:[],mx=Math.max(g*.5,...wd.map(x=>x.kcal),1);
+ const name=esc((myName||me).split(' ')[0]);
+ app.innerHTML=`<div class="narrow">
+ <div class="row" style="margin-bottom:10px"><div class="grow"><h1 class="hello">${greet()}, ${name} 👋</h1><div class="mut">${motive(d.meals.length,t.kcal,streak)}</div></div>${streak?`<span class="streak">🔥 ${streak}-day streak</span>`:''}</div>
+ <div class="card"><div class="top"><div class="ring"><svg width="132" height="132" viewBox="0 0 132 132"><circle cx="66" cy="66" r="54" fill="none" stroke="#edf2ef" stroke-width="13"/><circle id="rg" cx="66" cy="66" r="54" fill="none" stroke="${t.kcal>g*1.1?'#f59e0b':'#14804a'}" stroke-width="13" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}" style="transition:stroke-dashoffset .9s cubic-bezier(.2,.8,.2,1)"/></svg><div class="mid"><b>${R(t.kcal)}</b><small>of ${g} kcal</small></div></div>
+ <div>${[['Protein',t.protein,g*.075,'--p'],['Carbs',t.carbs,g*.125,'--c'],['Fat',t.fat,g*.033,'--f']].map(([n,v,tg,c])=>`<div class="macro"><div class="l"><span>${n}</span><span class="mut">${R(v)}g / ${R(tg)}g</span></div><div class="bar"><i style="width:0;background:var(${c})" data-w="${Math.min(100,v/tg*100)}"></i></div></div>`).join('')}<small><a href="#" id="eg">Change daily goal</a> · <a href="#" id="out">Not ${name}? Switch</a></small></div></div></div>
+ <div class="card"><h2>Log a meal</h2><label class="drop" id="dz"><input type="file" id="ph" accept="image/*"><span class="ic">📸</span><b>Tap to take or choose a photo</b><span class="mut">or drag a picture here</span></label><textarea id="nt" rows="1" placeholder="Optional note, e.g. “no sugar in my tea”" style="margin-top:10px"></textarea><div id="st"></div></div>
+ ${wd.length?`<div class="card"><h2>Your week</h2><div class="week">${wd.map((x,i)=>`<div class="day${i==6?' today':''}"><div class="dot" title="${x.meals} meals, ${x.kcal} kcal"><i style="height:0" data-h="${x.meals?Math.max(12,x.kcal/mx*100):0}"></i></div><b>${new Date(x.date+'T12:00:00').toLocaleDateString('en-IN',{weekday:'short'}).slice(0,3)}</b></div>`).join('')}</div><div class="row" style="margin-top:12px"><button class="btn s" id="wk">✨ Get my weekly insight</button></div><div id="wkout" class="ins" hidden></div></div>`:''}
+ <h2 style="margin:18px 2px 10px">Today's meals</h2><div id="ms">${d.meals.slice().reverse().map(m=>mealCard(m,true)).join('')||'<div class="card empty"><div class="big">🍽️</div><b>Nothing logged yet today</b><p>Your first photo is just a tap away.</p></div>'}</div></div>`;
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{$('#rg').style.strokeDashoffset=C*(1-pct);$$('[data-w]').forEach(e=>e.style.width=e.dataset.w+'%');$$('[data-h]').forEach(e=>e.style.height=e.dataset.h+'%')}));
+ $('#out').onclick=e=>{e.preventDefault();localStorage.removeItem('pl_me');localStorage.removeItem('pl_name');me=null;clientView()};
+ $('#eg').onclick=e=>{e.preventDefault();const v=prompt('Daily calorie goal (kcal)',g);if(v&&+v>=800&&+v<=6000){localStorage.setItem('pl_goal',R(v));toast('Goal updated');clientView()}};
+ const wk=$('#wk');if(wk)wk.onclick=async()=>{const o=$('#wkout');o.hidden=false;o.innerHTML='Writing your insight<span class="dots"></span>';wk.disabled=true;try{o.textContent=(await api('week',{},'&client='+encodeURIComponent(me))).summary}catch(x){o.innerHTML=`<span style="color:var(--warn)">${esc(x.message)}</span>`}wk.disabled=false};
+ const upload=async f=>{if(!f)return;if(!f.type.startsWith('image/')){$('#st').innerHTML='<div class="err">Please choose a photo.</div>';return}
+  try{const img=await shrink(f);$('#dz').outerHTML=`<div class="prev"><img class="scan" src="${img}" alt="Your photo"><div><b>AI is reading your plate<span class="dots"></span></b><div class="mut">Naming foods and estimating portions</div></div></div>`;$('#st').innerHTML='';
+   await api('log',{body:{client:me,image:img,note:$('#nt').value}});confetti();toast('Logged! Your coach will see this today 🎉');clientView()}
+  catch(x){clientView().then(()=>{$('#st').innerHTML=`<div class="err">${esc(x.message)}</div>`})}};
+ $('#ph').onchange=e=>upload(e.target.files[0]);
+ const dz=$('#dz');['dragenter','dragover'].forEach(v=>dz.addEventListener(v,e=>{e.preventDefault();dz.classList.add('over')}));['dragleave','drop'].forEach(v=>dz.addEventListener(v,e=>{e.preventDefault();dz.classList.remove('over')}));dz.addEventListener('drop',e=>upload(e.dataTransfer.files[0]));
+ $$('#ms .card[data-id]').forEach(c=>{const id=c.dataset.id,sv=c.querySelector('.save');if(!sv)return;
+  sv.onclick=async()=>{sv.disabled=true;sv.textContent='Saving…';try{await api('correct',{body:{id,items:readItems(c)}});toast('Saved. Thanks for keeping it accurate! ✅');clientView()}catch(x){sv.disabled=false;sv.textContent='Save corrections';toast(x.message)}};
+  c.querySelector('.del').onclick=async()=>{if(!confirm('Delete this meal?'))return;await api('delete',{body:{id}});toast('Meal deleted');clientView()}})}
+/* ---------- coach ---------- */
+let cf='all',cq='';
 async function coachView(){
- const d=await api('coach');const nl=d.clients.filter(c=>c.notLogged);
- app.innerHTML=`<div class="card"><h2>Today, ${d.day}</h2>${nl.length?`<span class="pill w">Not logged yet: ${nl.map(c=>esc(c.client.name)).join(', ')}</span>`:'<span class="pill">Everyone has logged today</span>'}<div class="mut" style="font-size:13px;margin-top:4px">Each column is one client's whole day. Reply to any meal.</div></div><div class="grid">${d.clients.map(c=>`<div class="card" data-c="${c.client.id}"><h2>${esc(c.client.name)}</h2>${c.notLogged?`<span class="pill w">nothing logged today</span> <small>${c.lastLogged?'last: '+new Date(c.lastLogged).toLocaleDateString('en-IN',{timeZone:'Asia/Kolkata'}):'never'}</small>`:`<b>${Math.round(c.totals.kcal)} kcal</b> <small>P ${Math.round(c.totals.protein)} · C ${Math.round(c.totals.carbs)} · F ${Math.round(c.totals.fat)} · ${c.meals.length} meals</small>`}<div><a href="#" class="wk"><small>Week summary</small></a><div class="wo mut" style="font-size:14px"></div></div>${c.meals.map(m=>mealCard(m,false)+`<div class="row" data-m="${m.id}" style="margin:-4px 0 12px"><input class="rt" placeholder="Reply to this meal"><button class="s rp fix">Send</button></div>`).join('')}</div>`).join('')||'<p class="mut">No clients yet. Ask them to open this link and log a meal.</p>'}</div>`;
- document.querySelectorAll('.rp').forEach(b=>b.onclick=async()=>{const r=b.parentElement;await api('reply',{body:{id:r.dataset.m,text:r.querySelector('.rt').value}});coachView()});
- document.querySelectorAll('.wk').forEach(a=>a.onclick=async e=>{e.preventDefault();const c=a.closest('[data-c]'),o=c.querySelector('.wo');o.textContent='Writing...';try{o.textContent=(await api('week',{},'&client='+c.dataset.c)).summary}catch(x){o.textContent=x.message}})}
+ const d=await api('coach'),cl=d.clients,nl=cl.filter(c=>c.notLogged),meals=cl.reduce((s,c)=>s+c.meals.length,0);
+ app.innerHTML=`<div class="row" style="margin-bottom:12px"><div class="grow"><h1 class="hello">Your clients today</h1><div class="mut">${d.day} · ${nl.length?`${nl.length} still to log. A friendly nudge goes a long way.`:'Everyone has logged today. Great coaching! 🎉'}</div></div></div>
+ <div class="tiles"><div class="tile"><b>${cl.length}</b><span>Clients</span></div><div class="tile g"><b>${cl.length-nl.length}</b><span>Logged today</span></div><div class="tile ${nl.length?'w':''}"><b>${nl.length}</b><span>Not logged yet</span></div><div class="tile"><b>${meals}</b><span>Meals today</span></div></div>
+ <div class="tools"><input id="q" type="search" placeholder="Search clients…" value="${esc(cq)}" aria-label="Search clients"><div class="filters">${[['all','All'],['no','Not logged'],['yes','Logged']].map(([k,l])=>`<button data-f="${k}" class="${cf==k?'on':''}">${l}</button>`).join('')}</div></div>
+ <div class="grid" id="gr"></div>`;
+ const draw=()=>{const list=cl.filter(c=>(cf=='all'||(cf=='no')==c.notLogged)&&c.client.name.toLowerCase().includes(cq.toLowerCase()));
+  $('#gr').innerHTML=list.map(c=>`<div class="card" data-c="${esc(c.client.id)}"><div class="who"><div class="av" style="background:${avc(c.client.name)}">${esc(c.client.name.trim()[0]||'?').toUpperCase()}</div><div style="flex:1"><h2>${esc(c.client.name)}</h2>${c.notLogged?`<span class="pill w">Nothing logged today</span> <small>${c.lastLogged?'Last: '+new Date(c.lastLogged).toLocaleDateString('en-IN',{timeZone:'Asia/Kolkata',day:'numeric',month:'short'}):'Never logged'}</small>`:`<small>${c.meals.length} meal${c.meals.length>1?'s':''} today</small>`}</div></div>
+  ${c.notLogged?'':`<div class="macros">${macChips(c.totals)}</div>`}
+  ${c.meals.map(m=>`<div class="cm" data-m="${m.id}"><div class="meal"><img src="${m.image}" alt="${esc(m.name)}"><div class="info"><h3>${esc(m.name)}</h3><small>${tm(m.ts)}</small> ${conf(m)}<div class="macros">${macChips(mt(m))}</div></div></div>${itemsTable(m,false)}${replies(m)}<div class="rp"><input class="rt" placeholder="Reply to ${esc(c.client.name.split(' ')[0])}…" aria-label="Reply"><button class="btn s send">Send</button></div><div class="quick">${['Great choice! 👏','Nice portion size','Try adding more protein','Add some veggies 🥦'].map(t=>`<button type="button">${t}</button>`).join('')}</div></div>`).join('')}
+  <div style="margin-top:10px"><button class="btn s wk">✨ Weekly summary</button></div><div class="ins wo" hidden></div></div>`).join('')||`<div class="card empty" style="grid-column:1/-1"><div class="big">🔍</div><b>${cl.length?'No clients match':'No clients yet'}</b><p>${cl.length?'Try a different filter.':'Ask them to open this link and log a meal.'}</p></div>`;
+  $$('.quick button').forEach(b=>b.onclick=()=>{const i=b.closest('.cm').querySelector('.rt');i.value=b.textContent;i.focus()});
+  $$('.send').forEach(b=>{const go=async()=>{const r=b.closest('.cm'),v=r.querySelector('.rt').value.trim();if(!v)return toast('Type a reply first');b.disabled=true;try{await api('reply',{body:{id:r.dataset.m,text:v}});toast('Reply sent ✅');coachView()}catch(x){b.disabled=false;toast(x.message)}};b.onclick=go;b.closest('.cm').querySelector('.rt').onkeydown=e=>{if(e.key=='Enter')go()}});
+  $$('.wk').forEach(b=>b.onclick=async()=>{const c=b.closest('[data-c]'),o=c.querySelector('.wo');o.hidden=false;o.innerHTML='Writing summary<span class="dots"></span>';b.disabled=true;try{o.textContent=(await api('week',{},'&client='+encodeURIComponent(c.dataset.c))).summary}catch(x){o.innerHTML=`<span style="color:var(--warn)">${esc(x.message)}</span>`}b.disabled=false})};
+ draw();$('#q').oninput=e=>{cq=e.target.value;draw()};$$('.filters button').forEach(b=>b.onclick=()=>{cf=b.dataset.f;$$('.filters button').forEach(x=>x.classList.toggle('on',x==b));draw()})}
 tabs();render();
 </script></body></html>

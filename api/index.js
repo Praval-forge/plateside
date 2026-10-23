@@ -72,6 +72,20 @@ module.exports = async (req, res) => {
       await save(db);
       return res.json({ meal: m });
     }
+    if (req.method === 'GET' && act === 'stats') {
+      const days = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = dayOf(Date.now() - i * 86400000);
+        const ms = db.meals.filter(m => m.client === q.client && dayOf(m.ts) === d);
+        days.push({ date: d, meals: ms.length, kcal: Math.round(totals(ms).kcal) });
+      }
+      let streak = 0;
+      for (let i = days.length - 1; i >= 0; i--) {
+        if (days[i].meals) streak++;
+        else if (i !== days.length - 1) break;
+      }
+      return res.json({ days, streak });
+    }
     if (req.method === 'GET' && act === 'week') {
       const c = db.clients[q.client];
       if (!c) return res.status(404).json({ error: 'Unknown client' });
