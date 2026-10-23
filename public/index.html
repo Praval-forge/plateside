@@ -1,20 +1,23 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#14804a">
+<meta name="theme-color" content="#0c1311">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('pl_theme')=='light'?'light':'dark'}catch(e){document.documentElement.dataset.theme='dark'}</script>
 <title>Plateside - meal photos your coach sees today</title>
 <style>
-:root{--g:#14804a;--g2:#0e6a3c;--gl:#e7f5ed;--acc:#f59e0b;--accl:#fff4dc;--bg:#f4f7f5;--ink:#16221b;--mut:#64736a;--card:#fff;--line:#e2e9e4;--warn:#c2410c;--warnl:#fdeee3;--red:#dc2626;--sh:0 1px 2px #0f2a1a0d,0 4px 14px #0f2a1a0f;--p:#3b82f6;--c:#f59e0b;--f:#ec4899}
+:root{--g:#14804a;--g2:#0e6a3c;--gl:#e7f5ed;--acc:#f59e0b;--accl:#fff4dc;--bg:#f4f7f5;--ink:#16221b;--mut:#64736a;--card:#fff;--line:#e2e9e4;--warn:#c2410c;--warnl:#fdeee3;--red:#dc2626;--sh:0 1px 2px #0f2a1a0d,0 4px 14px #0f2a1a0f;--p:#3b82f6;--c:#f59e0b;--f:#ec4899;--hd:#fffffff2;--soft:#edf2ef;--soft2:#eef3f0;--chip:#f1f5f3;--drop:#fafdfb;--dropb:#bfd6c8;--ins:#f7faf8;--btn:#fff;--pbg:#e8f0fe;--pt:#3b82f6;--cbg:#fff4dc;--ct:#a16207;--fbg:#fde7f2;--ft:#be185d;--stk:#92400e;--sk1:#e9efeb;--sk2:#f6f9f7;--demob:var(--demob);color-scheme:light}
+:root[data-theme=dark]{--g:#22a066;--g2:#1b8a58;--gl:#12301f;--accl:#3a2c0c;--bg:#0c1311;--ink:#e7efea;--mut:#93a49b;--card:#15201b;--line:#25352c;--warn:#fb923c;--warnl:#3a2012;--red:#f87171;--sh:0 1px 2px #0006,0 6px 18px #0004;--hd:#0c1311ee;--soft:#223229;--soft2:#1d2b24;--chip:#1f2d26;--drop:#121c17;--dropb:#2f4a3b;--ins:#111b16;--btn:#1b2822;--pbg:#14284a;--pt:#7fb2ff;--cbg:#3a2c0c;--ct:#fbbf24;--fbg:#3d1530;--ft:#f9a8d4;--stk:#fcd34d;--sk1:#1a2620;--sk2:#22322a;--demob:#5a4514;color-scheme:dark}
+body,.card,header,input,textarea,.btn,.tile,.seg button{transition:background-color .25s,color .25s,border-color .25s}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;font:16px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
 button{font:inherit;cursor:pointer}
 a{color:var(--g)}
 :focus-visible{outline:3px solid #14804a55;outline-offset:2px}
-header{position:sticky;top:0;z-index:20;background:#fffffff2;backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header{position:sticky;top:0;z-index:20;background:var(--hd);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .hd{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
 .logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:19px;letter-spacing:-.3px;flex:1}
 .logo svg{flex:none}
-.seg{display:flex;background:#eef3f0;border-radius:999px;padding:3px}
+.seg{display:flex;background:var(--soft2);border-radius:999px;padding:3px}
 .seg button{border:0;background:none;padding:7px 15px;border-radius:999px;font-size:14px;font-weight:600;color:var(--mut);transition:.15s}
 .seg button.on{background:var(--g);color:#fff;box-shadow:0 2px 6px #14804a44}
 main{max-width:1100px;margin:0 auto;padding:18px 16px 70px}
@@ -23,18 +26,18 @@ main{max-width:1100px;margin:0 auto;padding:18px 16px 70px}
 h2{font-size:17px;margin:0 0 10px;letter-spacing:-.2px}
 h1.hello{font-size:26px;line-height:1.2;margin:2px 0 4px;letter-spacing:-.5px}
 small,.mut{color:var(--mut)}
-input,textarea,select{font:inherit;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;width:100%;background:#fff;transition:border .15s,box-shadow .15s}
+input,textarea,select{font:inherit;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;width:100%;background:var(--btn);color:var(--ink);transition:border .15s,box-shadow .15s}
 input:focus,textarea:focus{border-color:var(--g);box-shadow:0 0 0 4px #14804a1f;outline:0}
 .btn{border:0;border-radius:11px;padding:11px 18px;font-weight:600;transition:transform .1s,box-shadow .15s,background .15s;display:inline-flex;align-items:center;gap:7px;justify-content:center}
 .btn:active{transform:scale(.97)}
 .btn.p{background:var(--g);color:#fff;box-shadow:0 3px 10px #14804a40}.btn.p:hover{background:var(--g2)}
-.btn.s{background:#fff;border:1.5px solid var(--line);color:var(--ink);padding:8px 13px;font-size:14px}.btn.s:hover{border-color:var(--g);color:var(--g)}
+.btn.s{background:var(--btn);border:1.5px solid var(--line);color:var(--ink);padding:8px 13px;font-size:14px}.btn.s:hover{border-color:var(--g);color:var(--g)}
 .btn.d:hover{border-color:var(--red);color:var(--red)}
 .btn.lg{padding:14px 22px;font-size:17px}
 .btn:disabled{opacity:.55;cursor:default}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>.grow{flex:1;min-width:150px}
 .pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;background:var(--gl);color:var(--g)}
-.pill.w{background:var(--warnl);color:var(--warn)}.pill.a{background:var(--accl);color:#a16207}
+.pill.w{background:var(--warnl);color:var(--warn)}.pill.a{background:var(--accl);color:var(--ct)}
 /* welcome */
 .welcome{text-align:center;padding:34px 22px}
 .welcome .hero{font-size:44px;margin-bottom:6px}
@@ -50,15 +53,15 @@ input:focus,textarea:focus{border-color:var(--g);box-shadow:0 0 0 4px #14804a1f;
 .ring .mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}
 .ring .mid b{font-size:26px;letter-spacing:-.5px}.ring .mid small{font-size:12px}
 .macro{margin:7px 0}.macro .l{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:3px}
-.bar{height:8px;background:#edf2ef;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;border-radius:99px;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.bar{height:8px;background:var(--soft);border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;border-radius:99px;transition:width .7s cubic-bezier(.2,.8,.2,1)}
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:6px}
 .day{text-align:center;font-size:12px;color:var(--mut)}
-.day .dot{height:46px;border-radius:10px;background:#edf2ef;margin-bottom:4px;display:flex;align-items:flex-end;overflow:hidden}
+.day .dot{height:46px;border-radius:10px;background:var(--soft);margin-bottom:4px;display:flex;align-items:flex-end;overflow:hidden}
 .day .dot i{display:block;width:100%;background:linear-gradient(#34d399,var(--g));border-radius:10px 10px 0 0;transition:height .6s}
 .day.today b{color:var(--g)}
-.streak{display:inline-flex;align-items:center;gap:6px;background:var(--accl);color:#92400e;font-weight:700;border-radius:999px;padding:5px 12px;font-size:14px}
+.streak{display:inline-flex;align-items:center;gap:6px;background:var(--accl);color:var(--stk);font-weight:700;border-radius:999px;padding:5px 12px;font-size:14px}
 /* upload */
-.drop{border:2px dashed #bfd6c8;border-radius:16px;padding:26px 16px;text-align:center;background:#fafdfb;transition:.15s;cursor:pointer;display:block}
+.drop{border:2px dashed var(--dropb);border-radius:16px;padding:26px 16px;text-align:center;background:var(--drop);transition:.15s;cursor:pointer;display:block}
 .drop:hover,.drop.over{border-color:var(--g);background:var(--gl)}
 .drop .ic{font-size:38px}.drop b{display:block;font-size:17px}
 .drop input{display:none}
@@ -70,12 +73,12 @@ input:focus,textarea:focus{border-color:var(--g);box-shadow:0 0 0 4px #14804a1f;
 .dots:after{content:"";animation:dt 1.2s steps(4) infinite}@keyframes dt{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
 /* meals */
 .meal{display:flex;gap:14px}
-.meal img{width:92px;height:92px;object-fit:cover;border-radius:14px;flex:none;background:#eef3f0}
+.meal img{width:92px;height:92px;object-fit:cover;border-radius:14px;flex:none;background:var(--soft2)}
 .meal .info{flex:1;min-width:0}
 .meal h3{margin:0;font-size:17px;letter-spacing:-.2px}
 .macros{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
-.chip{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:#f1f5f3}
-.chip.k{background:var(--gl);color:var(--g)}.chip.p{color:var(--p);background:#e8f0fe}.chip.c{color:#a16207;background:var(--accl)}.chip.f{color:#be185d;background:#fde7f2}
+.chip{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--chip)}
+.chip.k{background:var(--gl);color:var(--g)}.chip.p{color:var(--pt);background:var(--pbg)}.chip.c{color:var(--ct);background:var(--cbg)}.chip.f{color:var(--ft);background:var(--fbg)}
 details.edit{margin-top:8px}
 details.edit summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--g);list-style:none;padding:6px 0}
 details.edit summary::-webkit-details-marker{display:none}
@@ -90,13 +93,13 @@ details.edit summary:before{content:"✏️ "}
 .empty{text-align:center;padding:30px 10px;color:var(--mut)}.empty .big{font-size:42px}
 /* coach */
 .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
-.tile{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:var(--sh)}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:var(--sh)}
 .tile b{display:block;font-size:28px;letter-spacing:-.8px;line-height:1.1}.tile span{font-size:13px;color:var(--mut)}
 .tile.w b{color:var(--warn)}.tile.g b{color:var(--g)}
 .tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
 .tools input{max-width:260px}
-.filters{display:flex;gap:6px}.filters button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;color:var(--mut)}
-.filters button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.filters{display:flex;gap:6px}.filters button{border:1.5px solid var(--line);background:var(--btn);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;color:var(--mut)}
+.filters button.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;align-items:start}
 .grid .card{margin:0}
 .who{display:flex;align-items:center;gap:11px;margin-bottom:8px}
@@ -106,21 +109,21 @@ details.edit summary:before{content:"✏️ "}
 .cm .meal img{width:64px;height:64px;border-radius:12px}
 .cm h3{font-size:15px}
 .rp{display:flex;gap:6px;margin-top:8px}.rp input{padding:8px 10px;font-size:14px}
-.quick{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}.quick button{border:1px solid var(--line);background:#fff;border-radius:999px;font-size:12px;padding:3px 9px;color:var(--mut)}.quick button:hover{border-color:var(--g);color:var(--g)}
-.ins{background:#f7faf8;border-radius:12px;padding:10px 12px;font-size:14px;margin-top:8px;white-space:pre-wrap}
+.quick{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}.quick button{border:1px solid var(--line);background:var(--btn);border-radius:999px;font-size:12px;padding:3px 9px;color:var(--mut)}.quick button:hover{border-color:var(--g);color:var(--g)}
+.ins{background:var(--ins);border-radius:12px;padding:10px 12px;font-size:14px;margin-top:8px;white-space:pre-wrap}
 /* toast & confetti */
 #toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,90px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:999px;font-weight:600;font-size:15px;box-shadow:0 8px 24px #0004;transition:transform .35s cubic-bezier(.2,1.2,.4,1);z-index:50;max-width:92vw;text-align:center}
 #toast.show{transform:translate(-50%,0)}
 .cf{position:fixed;top:-10px;width:9px;height:14px;z-index:60;animation:fall 1.6s ease-in forwards;pointer-events:none}
 @keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.2}}
-.demo{background:var(--accl);color:#92400e;font-size:13px;text-align:center;padding:6px 10px;border-bottom:1px solid #f3dca0}
-.skel{height:90px;border-radius:16px;background:linear-gradient(90deg,#e9efeb,#f6f9f7,#e9efeb);background-size:200% 100%;animation:sk 1.2s infinite;margin-bottom:14px}@keyframes sk{to{background-position:-200% 0}}
+.demo{background:var(--accl);color:var(--stk);font-size:13px;text-align:center;padding:6px 10px;border-bottom:1px solid var(--demob)}
+.skel{height:90px;border-radius:16px;background:linear-gradient(90deg,var(--sk1),var(--sk2),var(--sk1));background-size:200% 100%;animation:sk 1.2s infinite;margin-bottom:14px}@keyframes sk{to{background-position:-200% 0}}
 @media(max-width:700px){.tiles{grid-template-columns:repeat(2,1fr)}.top{grid-template-columns:1fr;justify-items:center}.top>div:last-child{width:100%}.steps{grid-template-columns:1fr}h1.hello{font-size:22px}.items .hide{display:none}.join{flex-direction:column}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body>
 <header><div class="hd">
  <div class="logo"><svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#14804a"/><circle cx="16" cy="16" r="10" fill="none" stroke="#fff" stroke-width="2"/><circle cx="16" cy="16" r="5" fill="#fff"/><path d="M26 5v8M24 5v4a2 2 0 0 0 4 0V5" stroke="#fff" stroke-width="1.4" fill="none" stroke-linecap="round" transform="translate(-4 12) scale(.7)"/></svg>Plateside</div>
- <div class="seg" role="tablist"><button id="tc" class="on" role="tab">I'm a client</button><button id="tk" role="tab">I'm a coach</button></div>
+ <button id="th" class="btn s" aria-label="Switch colour theme" title="Switch light / dark" style="padding:7px 11px;border-radius:999px">🌙</button><div class="seg" role="tablist"><button id="tc" class="on" role="tab">I'm a client</button><button id="tk" role="tab">I'm a coach</button></div>
 </div><div id="demo" class="demo" hidden>Preview mode: sample data and a fake AI. The live site uses the real backend.</div></header>
 <main id="app"></main>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -162,6 +165,10 @@ function confetti(){const cs=['#14804a','#f59e0b','#3b82f6','#ec4899','#34d399']
 function tabs(){$('#tc').className=mode=='client'?'on':'';$('#tk').className=mode=='coach'?'on':''}
 $('#tc').onclick=()=>{mode='client';tabs();render()};$('#tk').onclick=()=>{mode='coach';tabs();render()};
 if(LOCAL)$('#demo').hidden=false;
+function theme(t,save){document.documentElement.dataset.theme=t;$('#th').textContent=t=='dark'?'☀️':'🌙';$('#th').title=t=='dark'?'Switch to light mode':'Switch to dark mode';document.querySelector('meta[name=theme-color]').content=t=='dark'?'#0c1311':'#14804a';if(save)try{localStorage.setItem('pl_theme',t)}catch(e){}}
+let saved=null;try{saved=localStorage.getItem('pl_theme')}catch(e){}
+theme(saved=='light'?'light':'dark');
+$('#th').onclick=()=>theme(document.documentElement.dataset.theme=='dark'?'light':'dark',true);
 function skeleton(){app.innerHTML='<div class="narrow"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>'}
 function shrink(file){return new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.8))};im.onerror=()=>no(new Error('Could not read that photo. Try another one.'));im.src=URL.createObjectURL(file)})}
 const greet=()=>{const h=+new Date().toLocaleString('en-GB',{hour:'2-digit',hour12:false,timeZone:'Asia/Kolkata'});return h<12?'Good morning':h<17?'Good afternoon':'Good evening'};
@@ -192,7 +199,7 @@ async function clientView(){
  const name=esc((myName||me).split(' ')[0]);
  app.innerHTML=`<div class="narrow">
  <div class="row" style="margin-bottom:10px"><div class="grow"><h1 class="hello">${greet()}, ${name} 👋</h1><div class="mut">${motive(d.meals.length,t.kcal,streak)}</div></div>${streak?`<span class="streak">🔥 ${streak}-day streak</span>`:''}</div>
- <div class="card"><div class="top"><div class="ring"><svg width="132" height="132" viewBox="0 0 132 132"><circle cx="66" cy="66" r="54" fill="none" stroke="#edf2ef" stroke-width="13"/><circle id="rg" cx="66" cy="66" r="54" fill="none" stroke="${t.kcal>g*1.1?'#f59e0b':'#14804a'}" stroke-width="13" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}" style="transition:stroke-dashoffset .9s cubic-bezier(.2,.8,.2,1)"/></svg><div class="mid"><b>${R(t.kcal)}</b><small>of ${g} kcal</small></div></div>
+ <div class="card"><div class="top"><div class="ring"><svg width="132" height="132" viewBox="0 0 132 132"><circle cx="66" cy="66" r="54" fill="none" style="stroke:var(--soft)" stroke-width="13"/><circle id="rg" cx="66" cy="66" r="54" fill="none" stroke="${t.kcal>g*1.1?'#f59e0b':'#14804a'}" stroke-width="13" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}" style="transition:stroke-dashoffset .9s cubic-bezier(.2,.8,.2,1)"/></svg><div class="mid"><b>${R(t.kcal)}</b><small>of ${g} kcal</small></div></div>
  <div>${[['Protein',t.protein,g*.075,'--p'],['Carbs',t.carbs,g*.125,'--c'],['Fat',t.fat,g*.033,'--f']].map(([n,v,tg,c])=>`<div class="macro"><div class="l"><span>${n}</span><span class="mut">${R(v)}g / ${R(tg)}g</span></div><div class="bar"><i style="width:0;background:var(${c})" data-w="${Math.min(100,v/tg*100)}"></i></div></div>`).join('')}<small><a href="#" id="eg">Change daily goal</a> · <a href="#" id="out">Not ${name}? Switch</a></small></div></div></div>
  <div class="card"><h2>Log a meal</h2><label class="drop" id="dz"><input type="file" id="ph" accept="image/*"><span class="ic">📸</span><b>Tap to take or choose a photo</b><span class="mut">or drag a picture here</span></label><textarea id="nt" rows="1" placeholder="Optional note, e.g. “no sugar in my tea”" style="margin-top:10px"></textarea><div id="st"></div></div>
  ${wd.length?`<div class="card"><h2>Your week</h2><div class="week">${wd.map((x,i)=>`<div class="day${i==6?' today':''}"><div class="dot" title="${x.meals} meals, ${x.kcal} kcal"><i style="height:0" data-h="${x.meals?Math.max(12,x.kcal/mx*100):0}"></i></div><b>${new Date(x.date+'T12:00:00').toLocaleDateString('en-IN',{weekday:'short'}).slice(0,3)}</b></div>`).join('')}</div><div class="row" style="margin-top:12px"><button class="btn s" id="wk">✨ Get my weekly insight</button></div><div id="wkout" class="ins" hidden></div></div>`:''}
